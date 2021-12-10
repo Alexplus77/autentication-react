@@ -1,0 +1,1 @@
+import { CardNews } from "CardNews";
