@@ -61,10 +61,13 @@ const App = () => {
   //Получаем данные с инпут формы регистрации
   const handleValueReg = ({ target: { value, name } }) =>
     setDataReg({ ...dataReg, [name]: value });
+
   //Вызываем форму регистрации
   const onRegistr = () => setIsRegistr(true);
+
   //Закрываем форму регистрации
   const handleClose = () => setIsRegistr(false);
+
   //Отправляем данные юзера на авторизацию
   const handleSubmit = (e) => {
     e.preventDefault();
