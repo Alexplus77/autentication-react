@@ -21,6 +21,8 @@ const App = () => {
       document.removeEventListener("click", (e) => handleClick(e), true);
     };
   }, [isRegistr]);
+
+  //Закрываем форму регистрации при клике вне формы
   const handleClick = (e) => {
     formReg.current &&
       isRegistr &&
@@ -52,7 +54,7 @@ const App = () => {
       body: JSON.stringify(dataReg),
     })
       .then((res) => res.json())
-      .then((dataRes) => {
+      .then(() => {
         alert("Такой пользователь уже зарегестрирован");
       })
       .catch((e) => console.log(e));
@@ -64,9 +66,6 @@ const App = () => {
 
   //Вызываем форму регистрации
   const onRegistr = () => setIsRegistr(true);
-
-  //Закрываем форму регистрации
-  const handleClose = () => setIsRegistr(false);
 
   //Отправляем данные юзера на авторизацию
   const handleSubmit = (e) => {
@@ -101,7 +100,6 @@ const App = () => {
           <div className="logo">Neto Social</div>
           {isRegistr && (
             <FormlReg
-              handleClose={handleClose}
               handleRegistration={handleRegistration}
               handleValueReg={handleValueReg}
               formReg={formReg}
