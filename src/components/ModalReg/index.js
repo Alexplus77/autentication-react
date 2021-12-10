@@ -1,1 +1,0 @@
-import { ModalReg } from "ModalReg";

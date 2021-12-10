@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "App.css";
 import { Form } from "components/Form/Form";
 import { CardNews } from "components/CardNews/CardNews";
-import { ModalReg } from "components/ModalReg/ModalReg";
+import { FormlReg } from "components/FormReg/FormlReg";
 import { FormAuthUser } from "./components/FormAuthUser/FormAuthUser";
 
 const App = () => {
@@ -97,7 +97,7 @@ const App = () => {
         <div className="header">
           <div className="logo">Neto Social</div>
           {isRegistr && (
-            <ModalReg
+            <FormlReg
               handleClose={handleClose}
               handleRegistration={handleRegistration}
               handleValueReg={handleValueReg}

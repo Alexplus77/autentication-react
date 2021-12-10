@@ -1,7 +1,7 @@
 import "App.css";
 import React from "react";
 
-const ModalReg = ({ handleRegistration, handleValueReg, formReg }) => {
+const FormlReg = ({ handleRegistration, handleValueReg, formReg }) => {
   return (
     <form className="form" onSubmit={handleRegistration} ref={formReg}>
       <input
@@ -26,4 +26,4 @@ const ModalReg = ({ handleRegistration, handleValueReg, formReg }) => {
     </form>
   );
 };
-export { ModalReg };
+export { FormlReg };
