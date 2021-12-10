@@ -6,39 +6,44 @@ import { ModalReg } from "components/ModalReg/ModalReg";
 import { FormAuthUser } from "./components/FormAuthUser/FormAuthUser";
 
 const App = () => {
-  const [dataValue, setDataValue] = useState({});
-  const [dataReg, setDataReg] = useState({});
-  const [isRegistr, setIsRegistr] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
-  const [userAuth, setUserAuth] = useState(null);
-  const [news, setNews] = useState(null);
+  const [dataValue, setDataValue] = useState({}); //Получаем данные с инпут формы login
+  const [dataReg, setDataReg] = useState({}); // Получаем данные с инпут формы регистрации
+  const [isRegistr, setIsRegistr] = useState(false); // Определяем вызов формы регистрации через кнопку "Регистрация"
+  const [isAuth, setIsAuth] = useState(false); //Определяем состояние, авторизован ли юзер
+  const [userAuth, setUserAuth] = useState(null); // хранятся данные из бека авторизованного юзера
+  const [news, setNews] = useState(null); // Новости
 
   const formReg = useRef(); // форма регистрации
+  /*Прослушиваем событие клика вне формы регистрации*/
   useEffect(() => {
-    document.addEventListener("click", (e) => {
-      e.target.parentElement !== formReg.current && setIsRegistr(false);
-    });
+    document.addEventListener("click", (e) => handleClick(e), true);
     return () => {
-      document.removeEventListener("click", (e) => {});
+      document.removeEventListener("click", (e) => handleClick(e), true);
     };
   }, [isRegistr]);
-
-  const url2 =
+  const handleClick = (e) => {
+    formReg.current &&
+      isRegistr &&
+      e.target.parentElement !== formReg.current &&
+      setIsRegistr(false);
+  };
+  // Выводим новости на страницу
+  const url =
     "https://newsapi.org/v2/top-headlines?country=ru&apiKey=0f8efc323e274fe4adf55603df7c344a";
   useEffect(() => {
-    fetch(url2)
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setNews(data.articles);
       });
   }, []);
-
+  // Получаем данные с инпутов формы login
   const handleChange = ({ target: { value, name } }) => {
     setDataValue({ ...dataValue, [name]: value });
   };
+  // Отправляем данные юзера с формы регистрации
   const handleRegistration = (e) => {
     e.preventDefault();
-
     fetch("/registration", {
       method: "POST",
       headers: {
@@ -53,13 +58,14 @@ const App = () => {
       .catch((e) => console.log(e));
     setIsRegistr(false);
   };
+  //Получаем данные с инпут формы регистрации
   const handleValueReg = ({ target: { value, name } }) =>
     setDataReg({ ...dataReg, [name]: value });
-
+  //Вызываем форму регистрации
   const onRegistr = () => setIsRegistr(true);
-
+  //Закрываем форму регистрации
   const handleClose = () => setIsRegistr(false);
-
+  //Отправляем данные юзера на авторизацию
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch("/auth", {
@@ -76,10 +82,12 @@ const App = () => {
           : alert("Не правильно введен логин или пароль");
       });
   };
+  //Устанавливаем что юзер авторизовался
   const hasAuth = (user) => {
     setIsAuth(true);
     setUserAuth(user);
   };
+  //Юзер выходит из авторизации
   const handleLogout = () => {
     setIsAuth(false);
   };
