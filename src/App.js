@@ -50,10 +50,11 @@ const App = () => {
         },
       })
       .then(({ data }) => {
-        data.id ? hasAuth(data) : handleLogout();
+        hasAuth(data);
         console.log(data.id);
       })
       .catch((e) => {
+        handleLogout();
         console.log("error:", e);
       });
   }, []);
