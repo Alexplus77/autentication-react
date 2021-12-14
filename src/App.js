@@ -44,7 +44,7 @@ const App = () => {
         setNews(data.articles);
       });
   };
-  //Обновляем станицу и проверяем на наличие токена
+  //Обновляем страницу и проверяем на наличие токена
 
   useEffect(() => {
     axios
@@ -61,6 +61,7 @@ const App = () => {
         console.log("error:", e);
       });
   }, []);
+
   // Получаем данные с инпутов формы login
   const handleChange = ({ target: { value, name } }) => {
     setDataValue({ ...dataValue, [name]: value });
