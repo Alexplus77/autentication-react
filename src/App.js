@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import "App.css";
-import { Form } from "components/Form/Form";
-import { CardNews } from "components/CardNews/CardNews";
-import { FormlReg } from "components/FormReg/FormlReg";
-import { FormAuthUser } from "./components/FormAuthUser/FormAuthUser";
+import axios from "axios";
+import { Form } from "components/Form";
+import { CardNews } from "components/CardNews";
+import { FormlReg } from "components/FormReg";
+import { FormAuthUser } from "components/FormAuthUser";
 
 const App = () => {
   const [dataValue, setDataValue] = useState({}); //Получаем данные с инпут формы login
@@ -13,7 +14,10 @@ const App = () => {
   const [userAuth, setUserAuth] = useState(null); // хранятся данные из бека авторизованного юзера
   const [news, setNews] = useState(null); // Новости
 
+  const token = localStorage.getItem("token");
+
   const formReg = useRef(); // форма регистрации
+
   /*Прослушиваем событие клика вне формы регистрации*/
   useEffect(() => {
     document.addEventListener("click", (e) => handleClick(e), true);
@@ -29,14 +33,32 @@ const App = () => {
       e.target.parentElement !== formReg.current &&
       setIsRegistr(false);
   };
+
   // Выводим новости на страницу
   const url =
     "https://newsapi.org/v2/top-headlines?country=ru&apiKey=0f8efc323e274fe4adf55603df7c344a";
-  useEffect(() => {
+  const responseNews = () => {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setNews(data.articles);
+      });
+  };
+  //Обновляем станицу и проверяем на наличие токена
+
+  useEffect(() => {
+    axios
+      .get("/privat", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(({ data }) => {
+        data.id ? hasAuth(data) : handleLogout();
+        console.log(data.id);
+      })
+      .catch((e) => {
+        console.log("error:", e);
       });
   }, []);
   // Получаем данные с инпутов формы login
@@ -46,20 +68,12 @@ const App = () => {
   // Отправляем данные юзера с формы регистрации
   const handleRegistration = (e) => {
     e.preventDefault();
-    fetch("/registration", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(dataReg),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        alert("Такой пользователь уже зарегестрирован");
-      })
-      .catch((e) => console.log(e));
+    axios
+      .post("/registration", dataReg)
+      .catch(() => alert("Такой пользователь уже зарегестрирован"));
     setIsRegistr(false);
   };
+
   //Получаем данные с инпут формы регистрации
   const handleValueReg = ({ target: { value, name } }) =>
     setDataReg({ ...dataReg, [name]: value });
@@ -70,29 +84,29 @@ const App = () => {
   //Отправляем данные юзера на авторизацию
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/auth", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(dataValue),
-    })
-      .then((res) => res.json())
-      .then((authUser) => {
-        authUser.auth
-          ? hasAuth(authUser)
-          : alert("Не правильно введен логин или пароль");
-      });
+    axios
+      .post("/auth", dataValue)
+      .then(({ data }) => {
+        if (data.id) {
+          hasAuth(data);
+          localStorage.setItem("token", JSON.stringify(data.token));
+        }
+      })
+      .catch(() => alert("Не правильно введен логин или пароль"));
   };
+
   //Устанавливаем что юзер авторизовался
   const hasAuth = (user) => {
     setIsAuth(true);
     setUserAuth(user);
+    responseNews();
   };
   //Юзер выходит из авторизации
   const handleLogout = () => {
     setIsAuth(false);
+    localStorage.removeItem("token");
   };
+
   return (
     <>
       <div className="container">

@@ -1,1 +1,1 @@
-import { FormAuthUser } from "FormAuthUser";
+export { FormAuthUser } from "./FormAuthUser";

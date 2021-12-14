@@ -1,1 +1,1 @@
-import { FormlReg } from "components/FormReg/FormlReg";
+export { FormlReg } from "components/FormReg/FormlReg";
