@@ -38,11 +38,7 @@ const App = () => {
   const url =
     "https://newsapi.org/v2/top-headlines?country=ru&apiKey=0f8efc323e274fe4adf55603df7c344a";
   const responseNews = () => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setNews(data.articles);
-      });
+    axios.get(url).then(({ data }) => setNews(data.articles));
   };
   //Обновляем страницу и проверяем на наличие токена
 
@@ -63,9 +59,9 @@ const App = () => {
   }, []);
 
   // Получаем данные с инпутов формы login
-  const handleChange = ({ target: { value, name } }) => {
+  const handleChange = ({ target: { value, name } }) =>
     setDataValue({ ...dataValue, [name]: value });
-  };
+
   // Отправляем данные юзера с формы регистрации
   const handleRegistration = (e) => {
     e.preventDefault();
