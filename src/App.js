@@ -37,9 +37,19 @@ const App = () => {
   // Выводим новости на страницу
   const url =
     "https://newsapi.org/v2/top-headlines?country=ru&apiKey=0f8efc323e274fe4adf55603df7c344a";
-  const responseNews = () => {
-    axios.get(url).then(({ data }) => setNews(data.articles));
-  };
+  const url2 = process.env.REACT_APP_NEWS_URL;
+  console.log(url);
+  useEffect(() => {
+    const responseNews = () => {
+      axios.get(url2).then(({ data }) => setNews(data.articles));
+    };
+    responseNews();
+    const idInterval = setInterval(responseNews, 6000);
+    return () => {
+      clearInterval(idInterval);
+    };
+  }, []);
+
   //Обновляем страницу и проверяем на наличие токена
 
   useEffect(() => {
@@ -97,7 +107,6 @@ const App = () => {
   const hasAuth = (user) => {
     setIsAuth(true);
     setUserAuth(user);
-    responseNews();
   };
   //Юзер выходит из авторизации
   const handleLogout = () => {

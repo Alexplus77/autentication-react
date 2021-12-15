@@ -6,7 +6,7 @@ const generateToken = (id) => {
   const payload = {
     id: id,
   };
-  return jwt.sign(payload, "Very secret words", { expiresIn: 33 });
+  return jwt.sign(payload, "Very secret words", { expiresIn: "1h" });
 };
 exports.authorization = (req, res) => {
   try {
