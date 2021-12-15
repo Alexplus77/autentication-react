@@ -14,8 +14,6 @@ const App = () => {
   const [userAuth, setUserAuth] = useState(null); // хранятся данные из бека авторизованного юзера
   const [news, setNews] = useState(null); // Новости
 
-  const token = localStorage.getItem("token");
-
   const formReg = useRef(); // форма регистрации
 
   /*Прослушиваем событие клика вне формы регистрации*/
@@ -51,6 +49,7 @@ const App = () => {
   //Обновляем страницу и проверяем на наличие токена
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     axios
       .get("/privat", {
         headers: {
