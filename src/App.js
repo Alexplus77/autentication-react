@@ -5,6 +5,7 @@ import { Form } from "components/Form";
 import { CardNews } from "components/CardNews";
 import { FormlReg } from "components/FormReg";
 import { FormAuthUser } from "components/FormAuthUser";
+const { REACT_APP_NEWS_URL } = process.env;
 
 const App = () => {
   const [dataValue, setDataValue] = useState({}); //Получаем данные с инпут формы login
@@ -37,11 +38,11 @@ const App = () => {
   // Выводим новости на страницу
   const url =
     "https://newsapi.org/v2/top-headlines?country=ru&apiKey=0f8efc323e274fe4adf55603df7c344a";
-  const url2 = process.env.REACT_APP_NEWS_URL;
-  console.log(url);
+  //const url2 = process.env.REACT_APP_NEWS_URL;
+  console.log(REACT_APP_NEWS_URL);
   useEffect(() => {
     const responseNews = () => {
-      axios.get(url2).then(({ data }) => setNews(data.articles));
+      axios.get(REACT_APP_NEWS_URL).then(({ data }) => setNews(data.articles));
     };
     responseNews();
     const idInterval = setInterval(responseNews, 6000);
