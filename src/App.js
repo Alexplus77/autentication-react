@@ -5,6 +5,7 @@ import { Form } from "components/Form";
 import { CardNews } from "components/CardNews";
 import { FormlReg } from "components/FormReg";
 import { FormAuthUser } from "components/FormAuthUser";
+import usePolling from "hooks/usePolling";
 
 const App = () => {
   const [dataValue, setDataValue] = useState({}); //Получаем данные с инпут формы login
@@ -12,7 +13,9 @@ const App = () => {
   const [isRegistr, setIsRegistr] = useState(false); // Определяем вызов формы регистрации через кнопку "Регистрация"
   const [isAuth, setIsAuth] = useState(false); //Определяем состояние, авторизован ли юзер
   const [userAuth, setUserAuth] = useState(null); // хранятся данные из бека авторизованного юзера
-  const [news, setNews] = useState(null); // Новости
+  //const [news, setNews] = useState(null); // Новости
+
+  const [{ news }] = usePolling(process.env.REACT_APP_NEWS_URL); //кастомный хук вывода новостей на страницу
 
   const formReg = useRef(); // форма регистрации
 
@@ -31,20 +34,6 @@ const App = () => {
       e.target.parentElement !== formReg.current &&
       setIsRegistr(false);
   };
-
-  // Выводим новости на страницу
-  useEffect(() => {
-    const responseNews = () => {
-      axios
-        .get(process.env.REACT_APP_NEWS_URL)
-        .then(({ data }) => setNews(data.articles));
-    };
-    responseNews();
-    const idInterval = setInterval(responseNews, 6000);
-    return () => {
-      clearInterval(idInterval);
-    };
-  }, []);
 
   //Обновляем страницу и проверяем на наличие токена
 
